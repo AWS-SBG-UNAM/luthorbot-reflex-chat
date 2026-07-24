@@ -1,0 +1,12 @@
+[project]
+name = "luthorbot-reflex-ui"
+version = "0.1.0"
+description = "Una interfaz web creada en Python + Reflex para interactuar con LuthorBot."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "boto3>=1.43.55",
+    "botocore[crt]>=1.43.55",
+    "reflex>=0.9.7",
+    "ruff>=0.16.0",
+]
