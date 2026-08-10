@@ -7,11 +7,28 @@ el manejo de errores de la API.
 """
 
 import os
+import re
 
 import boto3
 import reflex as rx
 from botocore.exceptions import BotoCoreError, ClientError
 from typing import Any, TypedDict
+
+
+def _sanitize_session_id(name: str) -> str:
+    """Convierte un nombre de chat en un sessionId válido para Amazon Lex V2.
+
+    Reemplaza cualquier carácter que no sea alfanumérico, punto, guión bajo,
+    dos puntos o guión por un guión, y garantiza que el resultado no esté vacío.
+
+    Args:
+        name: Nombre del chat tal como lo escribió el usuario.
+
+    Returns:
+        String que cumple el patrón [0-9a-zA-Z._:-]+.
+    """
+    safe = re.sub(r"[^0-9a-zA-Z._:-]", "-", name)
+    return safe or "chat"
 
 
 class QA(TypedDict):
@@ -145,7 +162,7 @@ class State(rx.State):
             return
         del self._chats[chat_name]
         if len(self._chats) == 0:
-            self._chats = {"Nuevo Chat": []}
+            self._chats = {"Nuevo-Chat": []}
         if self.current_chat not in self._chats:
             self.current_chat = list(self._chats.keys())[0]
 
@@ -223,7 +240,7 @@ class State(rx.State):
                 botId=bot_id,
                 botAliasId=bot_alias_id,
                 localeId=locale_id,
-                sessionId=self.current_chat,
+                sessionId=_sanitize_session_id(self.current_chat),
                 text=question,
             )
             messages = response.get("messages", [])

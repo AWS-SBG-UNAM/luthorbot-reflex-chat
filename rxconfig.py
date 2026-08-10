@@ -9,7 +9,7 @@ import reflex as rx
 
 config = rx.Config(
     app_name="chat",
-    api_url="http://52.71.52.190:8000",
+    #api_url="http://52.71.52.190:8000",
     plugins=[rx.plugins.SitemapPlugin()],
     show_built_with_reflex=False,
     telemetry_enabled=False,
