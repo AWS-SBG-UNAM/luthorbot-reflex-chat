@@ -101,6 +101,8 @@ class _TranscriptCollector(TranscriptResultStreamHandler):
 
 async def _transcribe_pcm(pcm: bytes, region: str, language_code: str = "es-US") -> str:
     """Transcribe raw PCM (16 kHz, 16-bit, mono) usando Transcribe Streaming."""
+    # Con AWS_ACCESS_KEY_ID/SECRET/TOKEN en el entorno (via .env + refresh_credentials.sh),
+    # TranscribeStreamingClient los lee directamente sin necesitar botocore[crt].
     client = TranscribeStreamingClient(region=region)
     stream = await client.start_stream_transcription(
         language_code=language_code,

@@ -20,6 +20,7 @@ import reflex as rx
 
 config = rx.Config(
     app_name="chat",
+    disable_plugins=[rx.plugins.SitemapPlugin()],
     show_built_with_reflex=False,
     telemetry_enabled=False,
     # Como no ocuparemos mucha configuración de interfaz, inyectamos la configuración
