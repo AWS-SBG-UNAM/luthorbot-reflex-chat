@@ -24,3 +24,4 @@ poetry.lock
 *.env
 uv.lock
 reflex.lock/
+.kiro/

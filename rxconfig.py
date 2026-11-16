@@ -5,12 +5,21 @@ incluyendo el nombre del módulo raíz, los plugins activos
 y las opciones de telemetría.
 """
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+REGION = os.getenv("AWS_REGION", "us-east-1")
+BOT_ID = os.environ["LEX_BOT_ID"]
+ALIAS_ID = os.environ["LEX_BOT_ALIAS_ID"]
+LOCALE = os.environ["LEX_LOCALE_ID"]
+
+
 import reflex as rx
 
 config = rx.Config(
     app_name="chat",
-    #api_url="http://52.71.52.190:8000",
-    plugins=[rx.plugins.SitemapPlugin()],
     show_built_with_reflex=False,
     telemetry_enabled=False,
     # Como no ocuparemos mucha configuración de interfaz, inyectamos la configuración

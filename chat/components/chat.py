@@ -82,6 +82,26 @@ def chat() -> rx.Component:
     )
 
 
+def mic_button() -> rx.Component:
+    """Renders the microphone toggle button in the action bar.
+
+    Shows a microphone icon (grass color) when idle, and a stop icon
+    (red color) while recording. Disabled and shows a loading spinner
+    while processing.
+    """
+    return rx.icon_button(
+        rx.cond(State.recording, rx.icon("square"), rx.icon("mic")),
+        on_click=rx.cond(
+            State.recording,
+            State.stop_recording,
+            State.start_recording,
+        ),
+        loading=State.processing,
+        disabled=State.processing,
+        color_scheme=rx.cond(State.recording, "red", "grass"),
+    )
+
+
 def action_bar() -> rx.Component:
     """Renderiza la barra de acción para enviar mensajes.
 
@@ -97,16 +117,22 @@ def action_bar() -> rx.Component:
         rx.vstack(
             rx.form(
                 rx.hstack(
+                    mic_button(),
                     rx.input(
                         rx.input.slot(),
                         placeholder="Escribe un mensaje para LuthorBot.",
                         id="question",
                         flex="1",
+                        disabled=State.recording,
+                        opacity=rx.cond(State.recording, "0.4", "1"),
                     ),
                     rx.button(
                         "Enviar Pregunta",
                         loading=State.processing,
-                        disabled=State.processing,
+                        disabled=rx.cond(
+                            State.processing | State.recording, True, False
+                        ),
+                        opacity=rx.cond(State.recording, "0.4", "1"),
                         type="submit",
                     ),
                     max_width="50em",
